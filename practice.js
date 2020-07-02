@@ -68,7 +68,7 @@
 		context.fillStyle = color;
 		context.fillRect(x, y, 20, 20);
 	}
-	function movePlayer(direction, amountToMove, yAxisIncrement=0, xAxisIncrement=0 ) //1 vertical // 2 horizontal
+	function movePlayer(yAxisIncrement=0, xAxisIncrement=0 )
 	{
 		if((yPosition && yPosition<29) && (xPosition && xPosition<29) || yPosition==0)
 		{
@@ -77,10 +77,9 @@
 				if (maze[yPosition + yAxisIncrement][xPosition+xAxisIncrement] == finishLine && playerHasKey)alert('VIIIIIICTORIIIIY');
 				if (maze[yPosition + yAxisIncrement][xPosition + xAxisIncrement] == finishLine && !playerHasKey)return;
 				if (maze[yPosition + yAxisIncrement][xPosition + xAxisIncrement] == keyBlock)playerHasKey = true;
-				if(direction==1) Draw(xPosition * 20, yPosition * 20 +amountToMove, redColor);	
-				if(direction==2) Draw(xPosition * 20 + amountToMove, yPosition * 20, redColor);
-				maze[yPosition][xPosition] = emptySpace;
+				Draw(xPosition * 20 + 20 * xAxisIncrement, yPosition * 20 + 20 * yAxisIncrement, redColor);
 				Draw(xPosition * 20, yPosition * 20, grayColor);
+				maze[yPosition][xPosition] = emptySpace;
 				maze[yPosition + yAxisIncrement][xPosition + xAxisIncrement] = playerPos;
 				yPosition+=yAxisIncrement;
 				xPosition+=xAxisIncrement;
@@ -90,16 +89,16 @@
 	window.addEventListener('keydown', (event) => {
 		switch (event.key) {
 			case 'ArrowUp':
-						movePlayer(1, -20 ,-1)	
+						movePlayer(-1)	
 				break;
 			case 'ArrowDown':
-						movePlayer(1, 20, 1)	
+						movePlayer(1)	
 				break;
 			case 'ArrowLeft':
-						movePlayer(2, -20,0,-1)	
+						movePlayer(0,-1)	
 				break;
 			case 'ArrowRight':
-						movePlayer(2, 20,0,1)
+						movePlayer(0,1)
 				break;
 		}
 	});
