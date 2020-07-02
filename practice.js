@@ -43,19 +43,16 @@
 		[ 0, 2, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0 ],
 		[ 0, 0, 0, 0, 0, 0, 0, -2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
 	];
-
 	for (var y = 0; y < 600; y += 20) {
 		for (var x = 0; x < 600; x += 20) {
 			if (maze[y / 20][x / 20] == solidBlock) {
 				Draw(x, y, '#370020');
 			}
-
 			if (maze[y / 20][x / 20] == emptySpace) {
 				Draw(x, y, '#CBCBCB');
 			}
-
 			if (maze[y / 20][x / 20] == playerPos) {
-				Draw(x, y, '#FE6000');
+				Draw(x, y, redColor);
 				xPosition = x / 20;
 				yPosition = y / 20;
 			}
@@ -67,83 +64,42 @@
 			}
 		}
 	}
-
 	function Draw(x, y, color) {
 		context.fillStyle = color;
 		context.fillRect(x, y, 20, 20);
 	}
-
+	function movePlayer(direction, amountToMove, yAxisIncrement=0, xAxisIncrement=0 ) //1 vertical // 2 horizontal
+	{
+		if((yPosition && yPosition<29) && (xPosition && xPosition<29) || yPosition==0)
+		{
+			if ((maze[yPosition][xPosition] == playerPos && maze[yPosition + yAxisIncrement][xPosition + xAxisIncrement] >= emptySpace) || maze[yPosition + yAxisIncrement][xPosition + xAxisIncrement] == finishLine)
+			{
+				if (maze[yPosition + yAxisIncrement][xPosition+xAxisIncrement] == finishLine && playerHasKey)alert('VIIIIIICTORIIIIY');
+				if (maze[yPosition + yAxisIncrement][xPosition + xAxisIncrement] == finishLine && !playerHasKey)return;
+				if (maze[yPosition + yAxisIncrement][xPosition + xAxisIncrement] == keyBlock)playerHasKey = true;
+				if(direction==1) Draw(xPosition * 20, yPosition * 20 +amountToMove, redColor);	
+				if(direction==2) Draw(xPosition * 20 + amountToMove, yPosition * 20, redColor);
+				maze[yPosition][xPosition] = emptySpace;
+				Draw(xPosition * 20, yPosition * 20, grayColor);
+				maze[yPosition + yAxisIncrement][xPosition + xAxisIncrement] = playerPos;
+				yPosition+=yAxisIncrement;
+				xPosition+=xAxisIncrement;
+			}
+		}
+	}
 	window.addEventListener('keydown', (event) => {
 		switch (event.key) {
 			case 'ArrowUp':
-				if (yPosition) {
-					//So the square doesnt want to go outside of the maze
-					if (maze[yPosition - 1][xPosition] == keyBlock) {
-						playerHasKey = true;
-					}
-					if (maze[yPosition][xPosition] == playerPos && maze[yPosition - 1][xPosition] >= emptySpace) {
-						maze[yPosition][xPosition] = emptySpace;
-						maze[yPosition - 1][xPosition] = playerPos;
-						Draw(xPosition * 20, yPosition * 20 - 20, redColor);
-						Draw(xPosition * 20, yPosition * 20, grayColor);
-						yPosition -= 1; // since you go up you only need to decrement the Y axis
-					}
-				}
+						movePlayer(1, -20 ,-1)	
 				break;
 			case 'ArrowDown':
-				if (yPosition < 29) {
-					//So the square doesnt want to go outside of the maze
-					if (maze[yPosition + 1][xPosition] == keyBlock) {
-						playerHasKey = true;
-					}
-					if (
-						(maze[yPosition][xPosition] == playerPos && maze[yPosition + 1][xPosition] >= emptySpace) ||
-						maze[yPosition + 1][xPosition] == finishLine
-					) {
-						if (maze[yPosition + 1][xPosition] == finishLine && playerHasKey) {
-							alert('VIIIIIICTORIIIIY');
-						}
-
-						if (maze[yPosition + 1][xPosition] == finishLine && !playerHasKey) {
-							break;
-						}
-						maze[yPosition][xPosition] = emptySpace;
-						maze[yPosition + 1][xPosition] = playerPos;
-						Draw(xPosition * 20, yPosition * 20 + 20, redColor);
-						Draw(xPosition * 20, yPosition * 20, grayColor);
-						yPosition += 1; // since you go down you only need to increment the Y axis
-					}
-				}
+						movePlayer(1, 20, 1)	
 				break;
 			case 'ArrowLeft':
-				if (xPosition) {
-					//So the square doesnt want to go outside of the maze
-					if (maze[yPosition][xPosition - 1] == keyBlock) {
-						playerHasKey = true;
-					}
-					if (maze[yPosition][xPosition] == playerPos && maze[yPosition][xPosition - 1] >= emptySpace) {
-						maze[yPosition][xPosition] = emptySpace;
-						maze[yPosition][xPosition - 1] = playerPos;
-						Draw(xPosition * 20 - 20, yPosition * 20, redColor);
-						Draw(xPosition * 20, yPosition * 20, grayColor);
-						xPosition--; //Since you go left you only need to decrement the X axis
-					}
-				}
+						movePlayer(2, -20,0,-1)	
 				break;
 			case 'ArrowRight':
-				if (xPosition < 29) {
-					//So the square doesnt want to go outside of the maze
-					if (maze[yPosition][xPosition + 1] == keyBlock) {
-						playerHasKey = true;
-					}
-					if (maze[yPosition][xPosition] == playerPos && maze[yPosition][xPosition + 1] >= emptySpace) {
-						maze[yPosition][xPosition] = emptySpace;
-						maze[yPosition][xPosition + 1] = playerPos;
-						Draw(xPosition * 20 + 20, yPosition * 20, redColor);
-						Draw(xPosition * 20, yPosition * 20, grayColor);
-						xPosition++; //Since you go right you only need to increment the X axis
-					}
-				}
+						movePlayer(2, 20,0,1)
 				break;
 		}
 	});
