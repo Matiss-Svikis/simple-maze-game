@@ -74,7 +74,7 @@
 		{
 			if ((maze[yPosition][xPosition] == playerPos && maze[yPosition + yAxisIncrement][xPosition + xAxisIncrement] >= emptySpace) || maze[yPosition + yAxisIncrement][xPosition + xAxisIncrement] == finishLine)
 			{
-				if (maze[yPosition + yAxisIncrement][xPosition+xAxisIncrement] == finishLine && playerHasKey)alert('VIIIIIICTORIIIIY');
+				if (maze[yPosition + yAxisIncrement][xPosition + xAxisIncrement] == finishLine && playerHasKey)alert('VIIIIIICTORIIIIY');
 				if (maze[yPosition + yAxisIncrement][xPosition + xAxisIncrement] == finishLine && !playerHasKey)return;
 				if (maze[yPosition + yAxisIncrement][xPosition + xAxisIncrement] == keyBlock)playerHasKey = true;
 				Draw(xPosition * 20 + 20 * xAxisIncrement, yPosition * 20 + 20 * yAxisIncrement, redColor);
